@@ -1,18 +1,39 @@
 const mongoose = require('mongoose');
-const mongoosePaginate = require('mongoose-paginate');
 const ProductSchema = new mongoose.Schema
 ({
-    title: {
+    name: {
       type: String, required: true,
     },
-    description: {
+
+    codigo: {
       type: String, required: true,
     },
-    createAt: {
-      type: Date, default: Date.now,
+
+    tipo: {
+      type: String,
     },
+
+    estoqueMin: {
+      type: String, 
+    },
+
+    estoqueMax: {
+      type: String,
+    },
+
+    valorCusto: {
+      type: String,
+    },
+
+    valorLucro: {
+      type: String,
+    },
+
+    precoVenda: {
+      type: String,
+    }
+
 });
 
-ProductSchema.plugin(mongoosePaginate);
-
-mongoose.model('Product', ProductSchema);
+const Product = mongoose.model('Product', ProductSchema);
+module.exports = Product;

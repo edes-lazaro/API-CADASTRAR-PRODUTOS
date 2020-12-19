@@ -1,20 +1,21 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const requireDir = require('require-dir');
-const cors = require('cors');
+
 //iniciando app
 const app = express();
-app.use(express.json());
-app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false}));
+
+
+require('./src/controllers/ProductController')(app);
+// require('./src/controllers/UserController')(app);
+
 
 //iniciando db
-mongoose.connect('mongodb://localhost:27017/nodeapi', 
-{useUnifiedTopology: true, useNewUrlParser: true}
-);
-requireDir('./src/models');
+mongoose.connect('mongodb://localhost/nodeapi', { useMongoClient: true});
+mongoose.Promise = global.Promise;
 
-const Product = mongoose.model('Product');
-
-app.use('/api', require('./src/routes'));
+module.exports = mongoose;
 
 app.listen(3001);

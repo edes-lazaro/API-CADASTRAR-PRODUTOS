@@ -1,33 +1,19 @@
-const mongoose = require('mongoose');
-const Product = mongoose.model('Product');
+const express = require('express');
+const Product = require('../models/Product');
+const router = express.Router();
 
-module.exports = {
-  //listagem
-  async index(req, res){
-      const {page=1} = req.query;
-      const products = await Product.paginate({},{page, limit: 3});
+router.post('/register', async(req, res) => {
 
-      return res.json(products);
-  },
-    
-  //criação
-      async store(req,res){
-        const product = await Product.create(req.body);
-        return res.json(product);
-      },
+  try{
+    const product = await Product.create(req.body);
 
-      async show(req,res){
-        const product = await Product.findById(req.params.id);
-        return res.json(product);
-      },
+    return res.send({product});
 
-      async update(req,res){
-        const product = await Product.findByIdAndUpdate(req.params.id, req.body, {new: true});
-        return res.json(product);
-      },
+  } catch(err){
+    return res.status(400).send({ error: 'falha de registro'});
+  }
 
-      async delete(req,res){
-        await Product.findByIdAndDelete(req.params.id);
-        return res.send();
-      },
-};
+});
+
+module.exports = app => app.use('/auth', router);
+
